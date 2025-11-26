@@ -37,5 +37,4 @@ A simple weather web app that displays current weather and a 5-day forecast usin
 - The project uses OpenWeatherMap free tier endpoints (current weather & 5-day/3-hour forecast). Check their terms and rate limits.
 - For production, keep your API key server-side and enable rate-limiting on proxy.
 
-## License
-MIT
+
