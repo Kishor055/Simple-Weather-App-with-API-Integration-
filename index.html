@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Simple Weather App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <h1>Simple Weather App</h1>
+      <div class="search" role="search">
+        <input id="searchInput" type="text" placeholder="Enter city (e.g., London)" aria-label="City name" />
+        <button id="searchBtn" aria-label="Search">Search</button>
+        <button id="geoBtn" title="Use current location" aria-label="Use location">📍</button>
+        <button id="unitToggle" title="Toggle °C / °F" aria-label="Toggle units">°C/°F</button>
+      </div>
+    </header>
+
+    <section id="current" class="card hidden" aria-live="polite">
+      <div class="location-row">
+        <h2 id="city">—</h2>
+        <small id="date">—</small>
+      </div>
+      <div class="weather-main">
+        <img id="icon" alt="weather icon" />
+        <div class="temp">
+          <div id="tempVal">--°C</div>
+          <div id="desc">—</div>
+        </div>
+      </div>
+      <div class="details">
+        <div>Humidity: <span id="humidity">—</span>%</div>
+        <div>Wind: <span id="wind">—</span> m/s</div>
+        <div>Pressure: <span id="pressure">—</span> hPa</div>
+      </div>
+    </section>
+
+    <section id="forecast" class="card hidden" aria-live="polite">
+      <h3>5-Day Forecast</h3>
+      <div id="forecastCards" class="forecast-grid"></div>
+    </section>
+
+    <section id="messages" role="status" aria-live="polite"></section>
+
+    <footer class="foot">
+      <small>Data from OpenWeatherMap. Built with HTML, CSS & JavaScript.</small>
+    </footer>
+  </main>
+
+  <script src="script.js" type="module"></script>
+</body>
+</html>
