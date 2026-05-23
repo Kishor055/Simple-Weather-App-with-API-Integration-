@@ -3,51 +3,111 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Simple Weather App</title>
+  <title>AI Weather Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="app">
-    <header class="top">
-      <h1>Simple Weather App</h1>
-      <div class="search" role="search">
-        <input id="searchInput" type="text" placeholder="Enter city (e.g., London)" aria-label="City name" />
-        <button id="searchBtn" aria-label="Search">Search</button>
-        <button id="geoBtn" title="Use current location" aria-label="Use location">📍</button>
-        <button id="unitToggle" title="Toggle °C / °F" aria-label="Toggle units">°C/°F</button>
-      </div>
-    </header>
-
-    <section id="current" class="card hidden" aria-live="polite">
-      <div class="location-row">
-        <h2 id="city">—</h2>
-        <small id="date">—</small>
-      </div>
-      <div class="weather-main">
-        <img id="icon" alt="weather icon" />
-        <div class="temp">
-          <div id="tempVal">--°C</div>
-          <div id="desc">—</div>
+  <div id="background-animation"></div>
+  <div class="container">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Weather AI</h2>
         </div>
+        <ul class="sidebar-nav">
+            <li class="active"><a href="#"><i class="fas fa-th-large"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-map-marker-alt"></i> Locations</a></li>
+            <li><a href="#"><i class="fas fa-chart-line"></i> Forecast Analytics</a></li>
+            <li><a href="#"><i class="fas fa-cloud-sun-rain"></i> Radar Map</a></li>
+            <li><a href="#"><i class="fas fa-bell"></i> Weather Alerts</a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+        <div class="sidebar-footer">
+          <div id="aqi-card-sidebar" class="card hidden">
+              <h4>Air Quality Index</h4>
+              <div class="aqi-widget">
+                  <span id="aqi-value-sidebar">42</span>
+                  <span id="aqi-status-sidebar">Good</span>
+              </div>
+          </div>
+        </div>
+    </aside>
+    <main class="app">
+      <header class="top">
+        <div class="search" role="search">
+          <div class="search-container">
+              <i class="fas fa-search search-icon"></i>
+              <input id="searchInput" type="text" placeholder="Search for city, country..." aria-label="City name" />
+          </div>
+          <div class="search-actions">
+              <button id="voiceBtn" aria-label="Voice Search"><i class="fas fa-microphone"></i></button>
+              <button id="geoBtn" aria-label="Use Current Location"><i class="fas fa-location-arrow"></i></button>
+          </div>
+        </div>
+      </header>
+
+      <section id="current" class="card hidden">
+        <div class="location-row">
+          <h2 id="city">—</h2>
+          <small id="date">—</small>
+        </div>
+        <div class="weather-main">
+          <div class="weather-icon">
+            <img id="icon" alt="weather icon" />
+          </div>
+          <div class="temp">
+            <div id="tempVal">--°</div>
+            <div id="desc">—</div>
+            <small>Feels like <span id="feels_like">--°</span></small>
+          </div>
+        </div>
+        <div class="details">
+          <div><p>UV Index</p><p id="uv-index" class="detail-value">—</p></div>
+          <div><p>Humidity</p><p id="humidity" class="detail-value">—</p></div>
+          <div><p>Wind</p><p id="wind" class="detail-value">—</p></div>
+          <div><p>Pressure</p><p id="pressure" class="detail-value">—</p></div>
+          <div><p>Sunrise</p><p id="sunrise" class="detail-value">—</p></div>
+          <div><p>Sunset</p><p id="sunset" class="detail-value">—</p></div>
+        </div>
+      </section>
+
+      <section id="hourly" class="card hidden">
+        <h3>Hourly Forecast</h3>
+        <div id="hourlyForecast" class="forecast-grid"></div>
+      </section>
+
+      <div class="dual-column-container">
+          <section id="forecast" class="card hidden">
+            <h3>7-Day Forecast</h3>
+            <div id="forecastList" class="forecast-list"></div>
+          </section>
+
+          <div class="right-column">
+            <section id="ai-insights" class="card hidden">
+                <h3>AI Weather Insight</h3>
+                <div class="ai-content">
+                    <div class="ai-icon-container"><i class="fas fa-robot"></i></div>
+                    <p id="ai-message">Let me check the weather for you...</p>
+                </div>
+                <button class="view-more-btn">View More Insights &rarr;</button>
+            </section>
+            <section id="aqi-card" class="card hidden">
+              <h3>Air Quality Index</h3>
+              <div class="aqi-main">
+                <h2 id="aqi-value">--</h2>
+                <p id="aqi-status">Unknown</p>
+              </div>
+              <p id="aqi-info">Fetching air quality data...</p>
+            </section>
+          </div>
       </div>
-      <div class="details">
-        <div>Humidity: <span id="humidity">—</span>%</div>
-        <div>Wind: <span id="wind">—</span> m/s</div>
-        <div>Pressure: <span id="pressure">—</span> hPa</div>
-      </div>
-    </section>
 
-    <section id="forecast" class="card hidden" aria-live="polite">
-      <h3>5-Day Forecast</h3>
-      <div id="forecastCards" class="forecast-grid"></div>
-    </section>
-
-    <section id="messages" role="status" aria-live="polite"></section>
-
-    <footer class="foot">
-      <small>Data from OpenWeatherMap. Built with HTML, CSS & JavaScript.</small>
-    </footer>
-  </main>
+      <footer class="foot">
+        <small>Powered by AI. Data from OpenWeatherMap.</small>
+      </footer>
+    </main>
+  </div>
 
   <script src="script.js" type="module"></script>
 </body>
