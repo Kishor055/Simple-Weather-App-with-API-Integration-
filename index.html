@@ -1,56 +1,95 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI Weather Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather AI - Dashboard</title>
+
+  <!-- SEO -->
+  <meta name="description" content="A premium, production-ready weather web application built with a modern design and advanced features." />
+  <meta name="keywords" content="weather, forecast, ai, dashboard, openweathermap" />
+  <meta name="author" content="Your Name" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Weather AI - Dashboard" />
+  <meta property="og:description" content="A premium, production-ready weather web application built with a modern design and advanced features." />
+  <meta property="og:image" content="assets/screenshots/dashboard.png" />
+  <meta property="og:url" content="https://your-weather-app.com" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Weather AI - Dashboard" />
+  <meta name="twitter:description" content="A premium, production-ready weather web application built with a modern design and advanced features." />
+  <meta name="twitter:image" content="assets/screenshots/dashboard.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
+
 <body>
-  <div id="background-animation"></div>
+  <div id="background-video-container">
+    <video autoplay muted loop id="background-video"></video>
+  </div>
   <div class="container">
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>Weather AI</h2>
-        </div>
-        <ul class="sidebar-nav">
-            <li class="active"><a href="#"><i class="fas fa-th-large"></i> Dashboard</a></li>
-            <li><a href="#"><i class="fas fa-map-marker-alt"></i> Locations</a></li>
-            <li><a href="#"><i class="fas fa-chart-line"></i> Forecast Analytics</a></li>
-            <li><a href="#"><i class="fas fa-cloud-sun-rain"></i> Radar Map</a></li>
-            <li><a href="#"><i class="fas fa-bell"></i> Weather Alerts</a></li>
-            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
-        </ul>
-        <div class="sidebar-footer">
-          <div id="aqi-card-sidebar" class="card hidden">
-              <h4>Air Quality Index</h4>
-              <div class="aqi-widget">
-                  <span id="aqi-value-sidebar">42</span>
-                  <span id="aqi-status-sidebar">Good</span>
-              </div>
+      <div class="sidebar-header">
+        <h2>Weather AI</h2>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="active"><a href="#"><i class="fas fa-th-large"></i> Dashboard</a></li>
+        <li><a href="#"><i class="fas fa-map-marker-alt"></i> Locations</a></li>
+        <li><a href="#"><i class="fas fa-chart-line"></i> Forecast Analytics</a></li>
+        <li><a href="#"><i class="fas fa-cloud-sun-rain"></i> Radar Map</a></li>
+        <li><a href="#"><i class="fas fa-bell"></i> Weather Alerts</a></li>
+        <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div id="aqi-card-sidebar" class="card hidden">
+          <h4>Air Quality Index</h4>
+          <div class="aqi-widget">
+            <span id="aqi-value-sidebar">--</span>
+            <span id="aqi-status-sidebar">--</span>
           </div>
         </div>
+      </div>
     </aside>
     <main class="app">
+      <div class="loader-container" id="loader">
+        <div class="loader"></div>
+      </div>
       <header class="top">
         <div class="search" role="search">
           <div class="search-container">
-              <i class="fas fa-search search-icon"></i>
-              <input id="searchInput" type="text" placeholder="Search for city, country..." aria-label="City name" />
+            <i class="fas fa-search search-icon"></i>
+            <input id="searchInput" type="text" placeholder="Search for city, country..." aria-label="City name" />
           </div>
           <div class="search-actions">
-              <button id="voiceBtn" aria-label="Voice Search"><i class="fas fa-microphone"></i></button>
-              <button id="geoBtn" aria-label="Use Current Location"><i class="fas fa-location-arrow"></i></button>
+            <button id="voiceBtn" aria-label="Voice Search"><i class="fas fa-microphone"></i></button>
+            <button id="geoBtn" aria-label="Use Current Location"><i class="fas fa-location-arrow"></i></button>
           </div>
         </div>
       </header>
 
       <section id="current" class="card hidden">
         <div class="location-row">
-          <h2 id="city">—</h2>
-          <small id="date">—</small>
+          <h2 id="city">--</h2>
+          <small id="date">--</small>
         </div>
         <div class="weather-main">
           <div class="weather-icon">
@@ -58,17 +97,35 @@
           </div>
           <div class="temp">
             <div id="tempVal">--°</div>
-            <div id="desc">—</div>
+            <div id="desc">--</div>
             <small>Feels like <span id="feels_like">--°</span></small>
           </div>
         </div>
         <div class="details">
-          <div><p>UV Index</p><p id="uv-index" class="detail-value">—</p></div>
-          <div><p>Humidity</p><p id="humidity" class="detail-value">—</p></div>
-          <div><p>Wind</p><p id="wind" class="detail-value">—</p></div>
-          <div><p>Pressure</p><p id="pressure" class="detail-value">—</p></div>
-          <div><p>Sunrise</p><p id="sunrise" class="detail-value">—</p></div>
-          <div><p>Sunset</p><p id="sunset" class="detail-value">—</p></div>
+          <div>
+            <p>UV Index</p>
+            <p id="uv-index" class="detail-value">--</p>
+          </div>
+          <div>
+            <p>Humidity</p>
+            <p id="humidity" class="detail-value">--</p>
+          </div>
+          <div>
+            <p>Wind</p>
+            <p id="wind" class="detail-value">--</p>
+          </div>
+          <div>
+            <p>Pressure</p>
+            <p id="pressure" class="detail-value">--</p>
+          </div>
+          <div>
+            <p>Sunrise</p>
+            <p id="sunrise" class="detail-value">--</p>
+          </div>
+          <div>
+            <p>Sunset</p>
+            <p id="sunset" class="detail-value">--</p>
+          </div>
         </div>
       </section>
 
@@ -78,29 +135,29 @@
       </section>
 
       <div class="dual-column-container">
-          <section id="forecast" class="card hidden">
-            <h3>7-Day Forecast</h3>
-            <div id="forecastList" class="forecast-list"></div>
-          </section>
+        <section id="forecast" class="card hidden">
+          <h3>8-Day Forecast</h3>
+          <div id="forecastList" class="forecast-list"></div>
+        </section>
 
-          <div class="right-column">
-            <section id="ai-insights" class="card hidden">
-                <h3>AI Weather Insight</h3>
-                <div class="ai-content">
-                    <div class="ai-icon-container"><i class="fas fa-robot"></i></div>
-                    <p id="ai-message">Let me check the weather for you...</p>
-                </div>
-                <button class="view-more-btn">View More Insights &rarr;</button>
-            </section>
-            <section id="aqi-card" class="card hidden">
-              <h3>Air Quality Index</h3>
-              <div class="aqi-main">
-                <h2 id="aqi-value">--</h2>
-                <p id="aqi-status">Unknown</p>
-              </div>
-              <p id="aqi-info">Fetching air quality data...</p>
-            </section>
-          </div>
+        <div class="right-column">
+          <section id="ai-insights" class="card hidden">
+            <h3>AI Weather Insight</h3>
+            <div class="ai-content">
+              <div class="ai-icon-container"><i class="fas fa-robot"></i></div>
+              <p id="ai-message">Let me check the weather for you...</p>
+            </div>
+            <button class="view-more-btn">View More Insights &rarr;</button>
+          </section>
+          <section id="aqi-card" class="card hidden">
+            <h3>Air Quality Index</h3>
+            <div class="aqi-main">
+              <h2 id="aqi-value">--</h2>
+              <p id="aqi-status">--</p>
+            </div>
+            <p id="aqi-info">--</p>
+          </section>
+        </div>
       </div>
 
       <footer class="foot">
@@ -109,6 +166,7 @@
     </main>
   </div>
 
-  <script src="script.js" type="module"></script>
+  <script src="js/app.js" type="module"></script>
 </body>
+
 </html>

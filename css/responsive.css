@@ -1,0 +1,58 @@
+@media (max-width: 1200px) {
+  .dual-column-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    display: none;
+  }
+
+  .app {
+    height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .top {
+    justify-content: center;
+  }
+
+  .weather-main {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .temp {
+    text-align: center;
+  }
+
+  .details {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 550px) {
+  .app {
+    padding: 1rem;
+  }
+
+  .top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .details {
+    grid-template-columns: 1fr;
+  }
+
+  .temp #tempVal {
+    font-size: 4rem;
+  }
+
+  .location-row h2 {
+    font-size: 1.5rem;
+  }
+}

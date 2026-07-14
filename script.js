@@ -5,8 +5,10 @@ const LAST_CITY_KEY = 'weather_last_city';
 let UNIT = localStorage.getItem(UNIT_KEY) || 'metric';
 
 const elements = {
+    loader: document.getElementById('loader'),
     searchInput: document.getElementById('searchInput'),
     searchBtn: document.getElementById('searchBtn'),
+    voiceBtn: document.getElementById('voiceBtn'),
     geoBtn: document.getElementById('geoBtn'),
     cityEl: document.getElementById('city'),
     dateEl: document.getElementById('date'),
@@ -30,29 +32,28 @@ const elements = {
     uvIndexEl: document.getElementById('uv-index')
 };
 
-async function fetchAndRender(weatherUrl, city) {
-    try {
-        const [weatherRes, forecastRes] = await Promise.all([
-            fetch(weatherUrl),
-            fetch(weatherUrl.replace('/weather', '/forecast'))
-        ]);
+const showLoader = () => elements.loader.classList.add('visible');
+const hideLoader = () => elements.loader.classList.remove('visible');
 
+async function fetchAndRender(weatherUrl, city) {
+    showLoader();
+    try {
+        const weatherRes = await fetch(weatherUrl);
         if (!weatherRes.ok) throw new Error(`City not found: ${weatherRes.statusText}`);
         
         const currentWeather = await weatherRes.json();
-        const forecast = await forecastRes.json();
 
-        const [uviRes, aqiRes] = await Promise.all([
-            fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${currentWeather.coord.lat}&lon=${currentWeather.coord.lon}&exclude=minutely,hourly,daily,alerts&appid=${API_KEY}`),
+        const [onecallRes, aqiRes] = await Promise.all([
+            fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${currentWeather.coord.lat}&lon=${currentWeather.coord.lon}&exclude=minutely&appid=${API_KEY}&units=${UNIT}`),
             fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${currentWeather.coord.lat}&lon=${currentWeather.coord.lon}&appid=${API_KEY}`)
         ]);
 
-        const uviData = await uviRes.json();
+        const onecallData = await onecallRes.json();
         const aqiData = await aqiRes.json();
 
-        renderCurrentWeather(currentWeather, uviData);
-        renderHourlyForecast(forecast.list);
-        render7DayForecast(forecast.list);
+        renderCurrentWeather(currentWeather, onecallData);
+        renderHourlyForecast(onecallData.hourly);
+        render8DayForecast(onecallData.daily);
         renderAQI(aqiData);
         updateAIInsights(currentWeather);
         updateBackground(currentWeather);
@@ -63,10 +64,12 @@ async function fetchAndRender(weatherUrl, city) {
     } catch (error) {
         console.error("Failed to fetch weather data:", error);
         handleError(error.message);
+    } finally {
+        hideLoader();
     }
 }
 
-function renderCurrentWeather(data, uviData) {
+function renderCurrentWeather(data, onecallData) {
     elements.cityEl.textContent = `${data.name}, ${data.sys.country}`;
     elements.dateEl.textContent = new Date(data.dt * 1000).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     elements.iconEl.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png`;
@@ -78,7 +81,7 @@ function renderCurrentWeather(data, uviData) {
     elements.sunriseEl.textContent = new Date(data.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     elements.sunsetEl.textContent = new Date(data.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     elements.feelsLikeEl.textContent = `${Math.round(data.main.feels_like)}°`;
-    elements.uvIndexEl.textContent = Math.round(uviData.current.uvi);
+    elements.uvIndexEl.textContent = Math.round(onecallData.current.uvi);
 }
 
 function renderAQI(data) {
@@ -99,30 +102,15 @@ function renderAQI(data) {
     elements.aqiStatusEl.style.color = color;
 }
 
-function render7DayForecast(forecastData) {
+function render8DayForecast(dailyData) {
     elements.forecastList.innerHTML = '';
-    const dailyData = {};
-
-    forecastData.forEach(item => {
-        const date = item.dt_txt.split(' ')[0];
-        if (!dailyData[date]) {
-            dailyData[date] = { temps_max: [], temps_min: [], icons: [], pops: [], winds: [] };
-        }
-        dailyData[date].temps_max.push(item.main.temp_max);
-        dailyData[date].temps_min.push(item.main.temp_min);
-        dailyData[date].icons.push(item.weather[0].icon);
-        dailyData[date].pops.push(item.pop); // Probability of precipitation
-        dailyData[date].winds.push(item.wind.speed);
-    });
-
-    Object.keys(dailyData).slice(1, 8).forEach(date => {
-        const day = dailyData[date];
-        const maxTemp = Math.round(Math.max(...day.temps_max));
-        const minTemp = Math.round(Math.min(...day.temps_min));
-        const avgPop = (day.pops.reduce((a, b) => a + b) / day.pops.length) * 100;
-        const maxWind = ((Math.max(...day.winds)) * 3.6).toFixed(1);
-        const icon = day.icons[Math.floor(day.icons.length / 2)];
-        const dayName = new Date(date).toLocaleDateString([], { weekday: 'long' });
+    dailyData.slice(0, 8).forEach(day => {
+        const maxTemp = Math.round(day.temp.max);
+        const minTemp = Math.round(day.temp.min);
+        const avgPop = day.pop * 100;
+        const maxWind = (day.wind_speed * 3.6).toFixed(1);
+        const icon = day.weather[0].icon;
+        const dayName = new Date(day.dt * 1000).toLocaleDateString([], { weekday: 'long' });
 
         const listItem = document.createElement('div');
         listItem.className = 'forecast-list-item';
@@ -145,10 +133,6 @@ function render7DayForecast(forecastData) {
         elements.forecastList.appendChild(listItem);
     });
 }
-
-// Keep other functions like getAIWeatherSuggestion, fetchWeatherData, fetchWeatherDataByCoords, handleError, updateBackground, renderHourlyForecast, updateAIInsights, and event listeners as they were, but ensure fetchAndRender is called correctly.
-
-// --- [The rest of the original script.js content remains here, with modifications to use the new fetchAndRender] ---
 
 function getAIWeatherSuggestion(weather) {
     const temp = weather.main.temp;
@@ -192,6 +176,7 @@ async function fetchWeatherDataByCoords(lat, lon) {
 function handleError(message) {
     console.warn(message);
     elements.cityEl.textContent = "Location not found";
+    hideLoader();
 }
 
 function updateBackground(weather) {
@@ -221,16 +206,14 @@ function updateBackground(weather) {
 
 function renderHourlyForecast(hourlyData) {
     elements.hourlyForecast.innerHTML = '';
-    const next8Hours = hourlyData.slice(0, 8);
-
-    next8Hours.forEach(item => {
+    hourlyData.slice(0, 24).forEach(item => { // Show 24 hours
         const card = document.createElement('div');
         card.className = 'forecast-card';
         const time = new Date(item.dt * 1000).toLocaleTimeString([], { hour: '2-digit', hour12: true });
-        const temp = `${Math.round(item.main.temp)}°`;
+        const temp = `${Math.round(item.temp)}°`;
         const icon = `https://openweathermap.org/img/wn/${item.weather[0].icon}.png`;
 
-        card.innerHTML = `<p>${time}</p><img src="${icon}" alt="${item.weather[0].description}"><p>${temp}</p>`;
+        card.innerHTML = `<p>${time}</p><img src="https://openweathermap.org/img/wn/${item.weather[0].icon}.png" alt="${item.weather[0].description}"><p>${temp}</p>`;
         elements.hourlyForecast.appendChild(card);
     });
 }
@@ -247,7 +230,10 @@ elements.searchBtn.addEventListener('click', () => {
 });
 
 elements.searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') elements.searchBtn.click();
+    if (e.key === 'Enter') {
+        const city = elements.searchInput.value;
+        if (city) fetchWeatherData(city);
+    }
 });
 
 elements.geoBtn.addEventListener('click', () => {
@@ -275,6 +261,35 @@ if (elements.sidebarNav) {
         target.classList.add('active');
     });
 }
+
+// Voice Search
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'en-US';
+recognition.interimResults = false;
+recognition.maxAlternatives = 1;
+
+elements.voiceBtn.addEventListener('click', () => {
+    recognition.start();
+});
+
+recognition.addEventListener('speechstart', () => {
+    console.log('Speech has been detected.');
+});
+
+recognition.addEventListener('result', (e) => {
+    const transcript = e.results[0][0].transcript;
+    elements.searchInput.value = transcript;
+    fetchWeatherData(transcript);
+});
+
+recognition.addEventListener('speechend', () => {
+    recognition.stop();
+});
+
+recognition.addEventListener('error', (e) => {
+    console.error('Error occurred in recognition: ' + e.error);
+    handleError("Voice search failed. Please try again.");
+});
 
 window.addEventListener('load', () => {
     const lastCity = localStorage.getItem(LAST_CITY_KEY);

@@ -1,40 +1,183 @@
-# Simple Weather App
+<div align="center">
 
-A simple weather web app that displays current weather and a 5-day forecast using OpenWeatherMap. Built with HTML, CSS, and vanilla JavaScript. Includes an optional small Flask proxy to hide your OpenWeather API key for production.
+# 🌦️ WeatherSphere
 
-## Features
-- Search weather by city
-- 5-day forecast (aggregated from 3-hour slices)
-- Geolocation-based weather
-- Unit toggle (°C / °F)
-- Caching (localStorage + in-memory) with TTL
-- Debounced search + abort previous requests + timeout handling
+### Modern Weather Web Application
 
-## How to run (static, local, quick)
-1. Clone this repo.
-2. Option A — local quick test (client-side API key):
-   - Open `script.js` and replace `YOUR_API_KEY` with your OpenWeatherMap API key.
-   - Open `index.html` in a browser (or serve using `python -m http.server`).
-3. Option B — using the Flask proxy (recommended for deployment):
-   - Create a virtual env: `python -m venv venv && source venv/bin/activate` (Windows use `venv\Scripts\activate`)
-   - Install: `pip install -r requirements.txt`
-   - Set environment variable: `export OPENWEATHER_API_KEY="your_key"` (Windows: `set OPENWEATHER_API_KEY=your_key`)
-   - Start server: `python app.py` (or `gunicorn app:app` for production)
-   - In `script.js` set `PROXY_ENABLED = true` and `PROXY_PREFIX = 'https://your-deployed-proxy.com'` or leave as `/api` for same-host.
-   - Serve `index.html` from a static host (or from the same Flask app with `send_from_directory`) and point API calls to proxy.
+A fast, responsive, and production-ready weather application built with **HTML, CSS, JavaScript**, and **OpenWeatherMap API** featuring real-time weather updates, forecasts, geolocation, caching, and a modern glassmorphism interface.
 
-## Deployment suggestions
-- Static-only demo: GitHub Pages (not secure for API key).
-- Secure demo (recommended): Deploy `app.py` to Render/Heroku/Railway and host frontend (or serve frontend from same service). This keeps your API key secret.
+<p align="center">
+  <img src="https://img.shields.io/github/license/Kishor055/WeatherSphere?style=for-the-badge">
+  <img src="https://img.shields.io/github/stars/Kishor055/WeatherSphere?style=for-the-badge">
+  <img src="https://img.shields.io/github/forks/Kishor055/WeatherSphere?style=for-the-badge">
+  <img src="https://img.shields.io/github/repo-size/Kishor055/WeatherSphere?style=for-the-badge">
+  <img src="https://img.shields.io/github/last-commit/Kishor055/WeatherSphere?style=for-the-badge">
+</p>
 
-## Testing & Performance
-- Test on latest Chrome/Firefox/Edge/Safari and mobile browsers.
-- Use Chrome DevTools Lighthouse to check performance/accessibility.
-- Network throttling & offline tests.
-- Caching TTL is 10 minutes (adjustable in `script.js`).
+<p align="center">
+  <a href="#-features">Features</a> •
+  <a href="#-installation">Installation</a> •
+  <a href="#-tech-stack">Tech Stack</a> •
+  <a href="#-project-structure">Project Structure</a> •
+  <a href="#-deployment">Deployment</a> •
+  <a href="#-contributing">Contributing</a>
+</p>
 
-## Notes
-- The project uses OpenWeatherMap free tier endpoints (current weather & 5-day/3-hour forecast). Check their terms and rate limits.
-- For production, keep your API key server-side and enable rate-limiting on proxy.
+</div>
 
+---
 
+## 🚀 Overview
+
+WeatherSphere is a modern weather application focused on performance, clean UI, and excellent user experience. It provides accurate weather information using the OpenWeatherMap API while following production-ready frontend practices including caching, request cancellation, debounced search, and secure API integration through an optional Flask proxy.
+
+---
+
+## ✨ Highlights
+
+- 🌍 Real-time Weather
+- 📍 Geolocation Support
+- 📅 Hourly & Multi-Day Forecast
+- 🌡️ Celsius / Fahrenheit Toggle
+- ⚡ Smart Local Caching
+- 🔄 Abort Previous Requests
+- 🔍 Debounced Search
+- 📱 Fully Responsive
+- 🎨 Modern Glassmorphism UI
+- 🔒 Optional Flask Proxy
+- 🚀 Production Ready
+
+---
+
+## 💻 Tech Stack
+
+| Frontend | Backend | API |
+|-----------|----------|-----|
+| HTML5 | Flask | OpenWeatherMap |
+| CSS3 | Python | REST API |
+| JavaScript (ES6+) | Gunicorn | JSON |
+
+---
+
+## 📂 Project Structure
+
+```text
+WeatherSphere/
+│
+├── assets/
+│   ├── css/
+│   ├── js/
+│   ├── images/
+│   └── icons/
+│
+├── index.html
+├── style.css
+├── script.js
+├── app.py
+├── requirements.txt
+├── README.md
+└── LICENSE
+```
+
+---
+
+## ⭐ Features
+
+✔ Current Weather
+
+✔ Hourly Forecast
+
+✔ Multi-Day Forecast
+
+✔ Geolocation
+
+✔ Weather Icons
+
+✔ Sunrise & Sunset
+
+✔ Wind Information
+
+✔ Humidity
+
+✔ Pressure
+
+✔ Visibility
+
+✔ Cloud Coverage
+
+✔ Rain Probability
+
+✔ API Caching
+
+✔ Mobile Responsive
+
+✔ Modern Animations
+
+✔ Error Handling
+
+✔ Loading Skeletons
+
+---
+
+## 📈 Performance
+
+- Debounced Search
+- AbortController
+- Request Timeout
+- Local Storage Cache
+- Memory Cache
+- Optimized API Calls
+- Fast Rendering
+
+---
+
+## 🔒 Security
+
+For production deployments:
+
+- Environment Variables
+- Flask API Proxy
+- Hidden API Keys
+- Rate Limiting Ready
+- HTTPS Compatible
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome.
+
+```bash
+Fork 🍴
+
+Clone 📥
+
+Create Branch 🌿
+
+Commit Changes ✅
+
+Push 🚀
+
+Open Pull Request 🎉
+```
+
+---
+
+## 👨‍💻 Developer
+
+**Kishor**
+
+Frontend Developer • Web Developer • Open Source Enthusiast
+
+GitHub:
+https://github.com/Kishor055
+
+---
+
+<div align="center">
+
+### ⭐ If you like this project, don't forget to star the repository.
+
+Made with ❤️ by **Kishor kakde Patil**
+
+</div>

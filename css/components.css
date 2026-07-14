@@ -1,0 +1,49 @@
+/* AQI Card Styles */
+#aqi-card {
+  text-align: center;
+}
+
+.aqi-main {
+  margin: 1rem 0;
+}
+
+#aqi-value {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+#aqi-status {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+#aqi-info {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Sidebar AQI Widget */
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.aqi-widget {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+}
+
+#aqi-value-sidebar {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+#aqi-status-sidebar {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
