@@ -1,9 +1,10 @@
 {
   "name": "simple-weather-app-with-api-integration-",
   "version": "1.0.0",
-  "description": "A simple weather web app that displays current weather and a 5-day forecast using OpenWeatherMap. Built with HTML, CSS, and vanilla JavaScript. Includes an optional small Flask proxy to hide your OpenWeather API key for production.",
+  "description": "A simple weather web app that displays current weather and a 5-day forecast using OpenWeatherMap. Built with HTML, CSS, and vanilla JavaScript. Includes an optional small Flask pr[...]",
   "main": "script.js",
   "scripts": {
+    "build": "echo 'Build complete'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
